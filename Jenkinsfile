@@ -13,7 +13,7 @@ node('centos7-docker-4c-2g') {
     stage('Telegraf') {
         sh 'env | sort'
         docker.build("telegraf-tester:latest")
-          .inside("--privileged --entrypoint=telegraf -e HOST_PROC=/rootfs/proc -e HOST_SYS=/rootfs/sys -e HOST_ETC=/rootfs/etc -v ${env.WORKSPACE}/telegraf.conf:/etc/telegraf/telegraf.conf:ro -v /var/run/docker.sock:/var/run/docker.sock:ro -v /sys:/rootfs/sys:ro -v /proc:/rootfs/proc:ro -v /etc:/rootfs/etc:ro") {
+          .inside("--privileged --entrypoint=telegraf -e HOST_PROC=/rootfs/proc -e HOST_SYS=/rootfs/sys -e HOST_ETC=/rootfs/etc -v ${env.WORKSPACE}/telegraf.conf:/etc/telegraf/telegraf.conf:ro -v /var/run/docker.sock:/var/run/docker.sock:ro -v /:/rootfs:ro") {
               // run 5 minute stress test to generate info
               sh 'stress --cpu 2 --timeout 300'
           }
