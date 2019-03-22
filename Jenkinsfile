@@ -13,10 +13,8 @@ node('centos7-docker-4c-2g') {
     stage('Telegraf') {
         sh 'env | sort'
         docker.image('telegraf:latest')
-          .inside("--privileged --entrypoint=telegraf -e HOST_PROC=/host/proc -v /proc:/host/proc:ro -v ${env.WORKSPACE}/telegraf.conf:/etc/telegraf/telegraf.conf:ro") {
-              sh 'echo Inside Telegraf Container...'
-              sh 'sleep 10'
-              sh 'exit 0'
+          .inside("--privileged --entrypoint='' -e HOST_PROC=/host/proc -v /proc:/host/proc:ro -v ${env.WORKSPACE}/telegraf.conf:/etc/telegraf/telegraf.conf:ro") {
+              sh 'telegraf'
           }
     }
 }
