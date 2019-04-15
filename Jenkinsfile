@@ -33,76 +33,14 @@ pipeline {
             }
         }
 
-        stage('🛠️ Multi-Arch Build') {
-            // fan out
-            parallel {
-                stage('💉 Test amd64') {
-                    agent {
-                        dockerfile {
-                            filename 'docker/Dockerfile'
-                            label 'centos7-docker-4c-2g'
-                            args '-u 0:0' // needed for go mod cache
-                        }
-                    }
-                    steps {
-                        sh 'make test'
-                    }
-                }
-                stage('💉Test arm64') {
-                    agent {
-                        dockerfile {
-                            filename 'docker/Dockerfile'
-                            label 'ubuntu18.04-docker-arm64-4c-2g'
-                            // additionalBuildArgs '--platform linux/arm64' //only works with experimental on
-                            args '-u 0:0' // needed for go mod cache
-                        }
-                    }
-                    steps {
-                        sh 'make test'
-                    }
-                }
-            }
-        }
-
-        stage('🎬 Semver Init') {
-            when { expression { edgex.isReleaseStream() } }
-            steps {
-                edgeXSemver 'init'
-                script {
-                    def semverVersion = edgeXSemver()
-                    env.setProperty('VERSION', semverVersion)
-                }
-            }
-        }
-
-        stage('🏷️ Semver Tag') {
-            when { expression { edgex.isReleaseStream() } }
-            steps {
-                edgeXSemver('tag')
-            }
-        }
-
         stage('🖋️ Mock Sigul Signing') {
             when { expression { edgex.isReleaseStream() } }
             steps {
                 sh 'echo lftools sigul branch v${VERSION}'
                 sh 'echo lftools sigul docker v${VERSION}'
-            }
-        }
-
-        stage('📦 Mock Push Docker Image') {
-            when { expression { edgex.isReleaseStream() } }
-            steps {
-                sh 'echo docker tag edgexfoundry/device-sdk-go:${VERSION}'
-                sh 'echo docker push edgexfoundry/device-sdk-go:${VERSION}'
-            }
-        }
-
-        stage('⬆️ Semver Bump Patch Version') {
-            when { expression { edgex.isReleaseStream() } }
-            steps {
-                edgeXSemver('bump patch')
-                edgeXSemver('-push')
+                sh 'mkdir test'
+                edgeXInfraLFToolsSign(command: 'dir', directory: 'test')
+                edgeXInfraLFToolsSign(command: 'git-tag', version: 'v${VERSION}')
             }
         }
     }
