@@ -57,11 +57,11 @@ pipeline {
     }
 }
 
-def loadGlobalLibrary(branch = '*/master') {
-    library(identifier: 'edgex-global-pipelines@master', 
+def loadGlobalLibrary(branch = '*/add-sigul') {
+    library(identifier: 'edgex-global-pipelines@add-sigul', 
         retriever: legacySCM([
             $class: 'GitSCM',
-            userRemoteConfigs: [[url: 'https://github.com/edgexfoundry/edgex-global-pipelines.git']],
+            userRemoteConfigs: [[url: 'https://github.com/lranjbar/edgex-global-pipelines.git']],
             branches: [[name: branch]],
             doGenerateSubmoduleConfigurations: false,
             extensions: [[
