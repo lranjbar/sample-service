@@ -36,8 +36,6 @@ pipeline {
         stage('🖋️ Mock Sigul Signing') {
             when { expression { edgex.isReleaseStream() } }
             steps {
-                sh 'echo lftools sigul branch v${VERSION}'
-                sh 'echo lftools sigul docker v${VERSION}'
                 sh 'mkdir test'
                 edgeXInfraLFToolsSign(command: 'dir', directory: 'test')
                 edgeXInfraLFToolsSign(command: 'git-tag', version: 'v${VERSION}')
@@ -57,8 +55,8 @@ pipeline {
     }
 }
 
-def loadGlobalLibrary(branch = '*/add-sigul') {
-    library(identifier: 'edgex-global-pipelines@add-sigul', 
+def loadGlobalLibrary(branch = '*/add-sigul-function') {
+    library(identifier: 'edgex-global-pipelines@add-sigul-function', 
         retriever: legacySCM([
             $class: 'GitSCM',
             userRemoteConfigs: [[url: 'https://github.com/lranjbar/edgex-global-pipelines.git']],

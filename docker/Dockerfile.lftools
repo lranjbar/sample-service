@@ -1,9 +1,21 @@
 FROM centos:7
 
-RUN yum install -y git python2 python2-devel make automake gcc kernel-devel sudo
+RUN yum install -y git python python-devel make automake gcc kernel-devel sudo
+
+RUN echo $'[fedora-infra-sigul] \n\
+name=Fedora builder packages for sigul \n\
+baseurl=https://kojipkgs.fedoraproject.org/repos-dist/epel7-infra/latest/x86_64/ \n\
+enabled=1 \n\
+gpgcheck=1 \n\
+gpgkey=https://infrastructure.fedoraproject.org/repo/infra/RPM-GPG-KEY-INFRA-TAGS \n\
+includepkgs=sigul* \n\
+skip_if_unavailable=True' > /etc/yum.repos.d/fedora-infra-sigul.repo
+
+RUN yum install -y sigul
+
 RUN curl "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py \
     && python get-pip.py \
     && rm -rf get-pip.py
 RUN pip install --upgrade pip setuptools
 
-RUN pip install -e git+https://github.com/lfit/releng-lftools.git#egg=lftools
+RUN pip install -I -e git+https://github.com/lfit/releng-lftools.git#egg=lftools
