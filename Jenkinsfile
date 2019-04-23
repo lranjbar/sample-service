@@ -25,6 +25,10 @@ pipeline {
         timestamps()
     }
 
+    environment {
+        VERSION = 'test'
+    }
+
     stages {
         stage('🚿 LF Prep') {
             steps {
@@ -38,6 +42,11 @@ pipeline {
             steps {
                 sh 'mkdir test'
                 edgeXInfraLFToolsSign(command: 'dir', directory: 'test')
+
+                sh "echo 'test' > test.txt"
+                sh 'git add -A'
+                sh "git commit -m 'Add test commit'"
+                sh 'git tag v${VERSION}'
                 edgeXInfraLFToolsSign(command: 'git-tag', version: 'v${VERSION}')
             }
         }
