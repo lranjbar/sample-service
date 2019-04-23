@@ -64,8 +64,8 @@ pipeline {
     }
 }
 
-def loadGlobalLibrary(branch = '*/add-sigul-function') {
-    library(identifier: 'edgex-global-pipelines@add-sigul-function', 
+def loadGlobalLibrary(branch = '*/add-sigul') {
+    library(identifier: 'edgex-global-pipelines@add-sigul', 
         retriever: legacySCM([
             $class: 'GitSCM',
             userRemoteConfigs: [[url: 'https://github.com/lranjbar/edgex-global-pipelines.git']],
