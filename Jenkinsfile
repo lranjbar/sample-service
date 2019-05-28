@@ -38,7 +38,7 @@ pipeline {
         }
 
         stage('🖋️ Mock Sigul Signing') {
-            when { expression { edgex.isReleaseStream() } }
+            // when { expression { edgex.isReleaseStream() } }
             steps {
                 sh 'mkdir test'
                 edgeXInfraLFToolsSign(command: 'dir', directory: 'test')
@@ -46,7 +46,7 @@ pipeline {
                 sh "echo 'test' > test.txt"
                 sh 'git add -A'
                 sh "git commit -m 'Add test commit'"
-                sh 'git tag v${VERSION}'
+                sh 'git tag -a v${VERSION}'
                 edgeXInfraLFToolsSign(command: 'git-tag', version: 'v${VERSION}')
             }
         }
