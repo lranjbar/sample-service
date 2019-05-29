@@ -82,11 +82,10 @@ pipeline {
             }
         }
 
-        stage('🖋️ Mock Sigul Signing') {
+        stage('🖋️ Sigul Signing') {
             when { expression { edgex.isReleaseStream() } }
             steps {
-                sh 'echo lftools sigul branch v${VERSION}'
-                sh 'echo lftools sigul docker v${VERSION}'
+                edgeXInfraLFToolsSign(command: 'git-tag', version: 'v${VERSION}')
             }
         }
 
@@ -98,13 +97,6 @@ pipeline {
             }
         }
 
-        stage('⬆️ Semver Bump Patch Version') {
-            when { expression { edgex.isReleaseStream() } }
-            steps {
-                edgeXSemver('bump patch')
-                edgeXSemver('-push')
-            }
-        }
     }
 
     post {
