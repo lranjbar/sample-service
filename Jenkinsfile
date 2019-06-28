@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-loadGlobalLibrary()
+loadGlobalLibrary('add-codecov')
 
 pipeline {
     agent {
@@ -46,6 +46,7 @@ pipeline {
                     }
                     steps {
                         sh 'make test'
+                        edgeXCodecov('sample-service-codecov-token')
                     }
                 }
                 stage('💉Test arm64') {
@@ -59,6 +60,7 @@ pipeline {
                     }
                     steps {
                         sh 'make test'
+                        edgeXCodecov('sample-service-codecov-token')
                     }
                 }
             }
@@ -123,7 +125,7 @@ def loadGlobalLibrary(branch = '*/master') {
     library(identifier: 'edgex-global-pipelines@master', 
         retriever: legacySCM([
             $class: 'GitSCM',
-            userRemoteConfigs: [[url: 'https://github.com/edgexfoundry/edgex-global-pipelines.git']],
+            userRemoteConfigs: [[url: 'https://github.com/tmpowers/edgex-global-pipelines.git']],
             branches: [[name: branch]],
             doGenerateSubmoduleConfigurations: false,
             extensions: [[
