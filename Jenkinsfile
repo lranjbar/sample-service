@@ -29,7 +29,7 @@ pipeline {
         stage('🚿 LF Prep') {
             steps {
                 edgeXSetupEnvironment()
-                edgeXDockerLogin(settingsFile: env.MVN_SETTINGS)
+                edgeXDockerLogin(settingsFile: 'sandbox-settings')
             }
         }
 
