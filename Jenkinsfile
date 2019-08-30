@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-loadGlobalLibrary('add-codecov')
+loadGlobalLibrary('snyk')
 
 pipeline {
     agent {
@@ -63,6 +63,12 @@ pipeline {
                         edgeXCodecov('sample-service-codecov-token')
                     }
                 }
+            }
+        }
+
+        stage('Snyk Test') {
+            steps {
+                edgeXSnyk()
             }
         }
 
