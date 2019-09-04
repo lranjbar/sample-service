@@ -68,7 +68,7 @@ pipeline {
 
         stage('Snyk Test') {
             steps {
-                edgeXSnyk()
+                edgeXSnyk(dockerImage="nexus3.edgexfoundry.org:10003/edgex-snyk-go:1.217.3", dockerFile="snyk-test/Dockerfile")
             }
         }
 
